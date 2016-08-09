@@ -2,7 +2,7 @@
 
 Authenticate your [Rocket.Chat](https://github.com/RocketChat/Rocket.Chat) users using [Django framework](https://github.com/django/django).
 
-This app implements the API used by [Rocket.Chat IFrame authentication](https://rocket.chat/docs/administrator-guides/authentication/iframe/).
+This app implements the API used by [Rocket.Chat IFrame authentication](https://rocket.chat/docs/administrator-guides/authentication/iframe/). Also, it handles logout by wiring up a method on Django signals.
 
 
 # Quickstart
