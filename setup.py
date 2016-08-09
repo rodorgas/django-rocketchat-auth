@@ -23,7 +23,7 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 1.10',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License'
+        'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
