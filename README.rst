@@ -1,7 +1,7 @@
 django-rocketchat-auth
 ======================
 
-Authenticate your `Rocket.Chat`_.
+Authenticate your `Rocket.Chat`_ users with Django web framework.
 
 This app implements the API used by `Rocket.Chat IFrame authentication`_. Also, it handles logout by wiring up a method on Django signals.
 
