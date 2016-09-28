@@ -90,23 +90,30 @@ def api(request):
 
     default_rooms = mongo.rocketchat_room.find({'default': True})
     for default_room in default_rooms:
-        now = datetime.datetime.now()
 
-        subscription = {
-            '_id': generate_id(),
-            'open': True,
-            'alert': False,
-            'unread': 0,
-            'ts': now,
+        subscription = mongo.users.find_one({
             'rid': default_room['_id'],
-            'name': default_room['name'],
-            't': 'c',
-            'u': {'_id': user['_id'], 'username': user['username']},
-            '_updatedAt': now,
-            'ls': now,
-        }
+            'u': {'_id': user['_id']},
+        })
 
-        mongo.rocketchat_subscription.insert_one(subscription)
+        if not subscription:
+            now = datetime.datetime.now()
+
+            subscription = {
+                '_id': generate_id(),
+                'open': True,
+                'alert': False,
+                'unread': 0,
+                'ts': now,
+                'rid': default_room['_id'],
+                'name': default_room['name'],
+                't': 'c',
+                'u': {'_id': user['_id'], 'username': user['username']},
+                '_updatedAt': now,
+                'ls': now,
+            }
+
+            mongo.rocketchat_subscription.insert_one(subscription)
 
     return JsonResponse({
         'token': user['services']['iframe']['token'],
