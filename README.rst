@@ -12,11 +12,11 @@ This app implements the API used by `Rocket.Chat IFrame authentication`_. Also, 
 Quickstart
 ----------
 
-1. Install this app in you project:::
+1. Install this app in you project::
 
     pip install django-rocketchat-auth
 
-2. Add "rocketchat_auth" to your INSTALLED_APPS setting like this:::
+2. Add "rocketchat_auth" to your INSTALLED_APPS setting like this::
 
     INSTALLED_APPS = (
         ...
@@ -28,7 +28,7 @@ Quickstart
     MONGO_DB = 'localhost:27017'
     ROCKETCHAT = 'localhost'
 
-4. Include the rocketchat_auth URLconf in your project urls.py like this:::
+4. Include the rocketchat_auth URLconf in your project urls.py like this::
 
     urlpatterns += [url(r'^rocketchat/', include('rocketchat_auth.urls'))]
 
