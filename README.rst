@@ -1,15 +1,20 @@
 django-rocketchat-auth
 ======================
 
+.. image:: https://img.shields.io/pypi/v/django-rocketchat-auth.svg
+    :target: https://pypi.python.org/pypi/django-rocketchat-auth
+
 Authenticate your `Rocket.Chat`_ users with Django web framework.
 
 This app implements the API used by `Rocket.Chat IFrame authentication`_. Also, it handles logout by wiring up a method on Django signals.
 
 
 Quickstart
-==========
+----------
 
-1. Install this app in you project
+1. Install this app in you project:::
+
+    pip install django-rocketchat-auth
 
 2. Add "rocketchat_auth" to your INSTALLED_APPS setting like this:::
 
@@ -36,7 +41,7 @@ Quickstart
 
 
 Roadmap
-=======
+-------
 
 - Enforce unique email registration in Django admin, since Rocket.Chat requires this.
 - Update Rocket.Chat user details in MongoDB when the user is modified in Django Admin.

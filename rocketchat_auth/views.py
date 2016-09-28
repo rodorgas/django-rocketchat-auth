@@ -20,12 +20,18 @@ def redirect_rocketchat(request):
     return redirect(settings.ROCKETCHAT)
 
 
+def generate_id():
+    n = 17
+    chars = string.ascii_letters + string.digits
+    random_id = ''.join(random.SystemRandom().choice(chars) for _ in range(n))
+
+    return random_id
+
+
 @cors_allow_credentials()
 def api(request):
     """
     Implements API for Rocket.Chat IFrame authentication
-
-    https://rocket.chat/docs/administrator-guides/authentication/iframe/
     """
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
@@ -38,18 +44,17 @@ def api(request):
 
     if not user:
         # Create the user if doesn't exist in mongo
-        n = 17
-        chars = string.ascii_letters + string.digits
-        user_id = ''.join(random.SystemRandom().choice(chars) for _ in range(n))
+        fullname = ' '.join([request.user.first_name, request.user.last_name])\
+                      .strip()
 
         user = {
-            '_id': user_id,
+            '_id': generate_id(),
             'createdAt': datetime.datetime.now(),
             'emails': [{
                 'address': request.user.email,
                 'verified': True
             }],
-            'name': ' '.join([request.user.first_name, request.user.last_name]).strip(),
+            'name': fullname,
             'username': request.user.username,
             'active': True,
             'roles': [
@@ -77,12 +82,31 @@ def api(request):
     # Save the user back to mongo
     mongo.users.update_one({'_id': user['_id']}, {'$set': user})
 
-
     # Add the user to default channels
     mongo.rocketchat_room.update(
         {'default': True},
         {'$addToSet': {'usernames': request.user.username}},
     )
+
+    default_rooms = mongo.rocketchat_room.find({'default': True})
+    for default_room in default_rooms:
+        now = datetime.datetime.now()
+
+        subscription = {
+            '_id': generate_id(),
+            'open': True,
+            'alert': False,
+            'unread': 0,
+            'ts': now,
+            'rid': default_room['_id'],
+            'name': default_room['name'],
+            't': 'c',
+            'u': {'_id': user['_id'], 'username': user['username']},
+            '_updatedAt': now,
+            'ls': now,
+        }
+
+        mongo.rocketchat_subscription.insert_one(subscription)
 
     return JsonResponse({
         'token': user['services']['iframe']['token'],
