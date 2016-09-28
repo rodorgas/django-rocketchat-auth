@@ -16,7 +16,7 @@ setup(
     description='Authenticate Rocket.Chat with Django Framework',
     long_description=README,
     url='https://rodorgas.github.com/django-rocketchat-auth',
-    author='Your Name',
+    author='Rodrigo Orem',
     author_email='orem.rodrigo@gmail.com',
     classifiers=[
         'Environment :: Web Environment',
