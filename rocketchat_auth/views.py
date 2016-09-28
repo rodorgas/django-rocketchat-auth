@@ -41,9 +41,11 @@ def api(request):
     mongo = client.rocketchat
 
     user = mongo.users.find_one({'username': request.user.username})
+    user_created = False
 
     if not user:
         # Create the user if doesn't exist in mongo
+        user_created = True
         fullname = ' '.join([request.user.first_name, request.user.last_name])\
                       .strip()
 
@@ -82,38 +84,39 @@ def api(request):
     # Save the user back to mongo
     mongo.users.update_one({'_id': user['_id']}, {'$set': user})
 
-    # Add the user to default channels
-    mongo.rocketchat_room.update(
-        {'default': True},
-        {'$addToSet': {'usernames': request.user.username}},
-    )
+    if user_created:
+        # Add the user to default channels
+        mongo.rocketchat_room.update(
+            {'default': True},
+            {'$addToSet': {'usernames': request.user.username}},
+        )
 
-    default_rooms = mongo.rocketchat_room.find({'default': True})
-    for default_room in default_rooms:
+        default_rooms = mongo.rocketchat_room.find({'default': True})
+        for default_room in default_rooms:
 
-        subscription = mongo.users.find_one({
-            'rid': default_room['_id'],
-            'u': {'_id': user['_id']},
-        })
-
-        if not subscription:
-            now = datetime.datetime.now()
-
-            subscription = {
-                '_id': generate_id(),
-                'open': True,
-                'alert': False,
-                'unread': 0,
-                'ts': now,
+            subscription = mongo.users.find_one({
                 'rid': default_room['_id'],
-                'name': default_room['name'],
-                't': 'c',
-                'u': {'_id': user['_id'], 'username': user['username']},
-                '_updatedAt': now,
-                'ls': now,
-            }
+                'u': {'_id': user['_id']},
+            })
 
-            mongo.rocketchat_subscription.insert_one(subscription)
+            if not subscription:
+                now = datetime.datetime.now()
+
+                subscription = {
+                    '_id': generate_id(),
+                    'open': True,
+                    'alert': False,
+                    'unread': 0,
+                    'ts': now,
+                    'rid': default_room['_id'],
+                    'name': default_room['name'],
+                    't': 'c',
+                    'u': {'_id': user['_id'], 'username': user['username']},
+                    '_updatedAt': now,
+                    'ls': now,
+                }
+
+                mongo.rocketchat_subscription.insert_one(subscription)
 
     return JsonResponse({
         'token': user['services']['iframe']['token'],
