@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from pymongo import MongoClient
 
@@ -29,6 +30,7 @@ def generate_id():
 
 
 @cors_allow_credentials()
+@xframe_options_exempt
 def api(request):
     """
     Implements API for Rocket.Chat IFrame authentication
