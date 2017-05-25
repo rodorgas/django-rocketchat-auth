@@ -21,8 +21,8 @@ def create_user(email, fullname, username):
     if not user:
 
         headers = {
-            'X-Auth-Token': ROCKETCHAT_AUTH_TOKEN,
-            'X-User-Id': ROCKETCHAT_USER_ID,
+            'X-Auth-Token': settings.ROCKETCHAT_AUTH_TOKEN,
+            'X-User-Id': settings.ROCKETCHAT_USER_ID,
         }
         data = {
             'email': email,
