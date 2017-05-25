@@ -14,7 +14,7 @@ def home(request):
 
 
 def redirect_rocketchat(request):
-    return redirect(settings.ROCKETCHAT)
+    return redirect(settings.ROCKETCHAT_URL)
 
 
 @cors_allow_credentials()
@@ -34,10 +34,10 @@ def api(request):
         fullname = ' '.join([request.user.first_name, request.user.last_name])\
                       .strip()
 
-        headers = [
-            "X-Auth-Token: f5hmuxT4shHDMnre6Pv8bJdi0Xhby0ACfQNCgqp81jl",
-            "X-User-Id: 57RK8pYo8KPE8RnMw"
-        ]
+        headers = {
+            'X-Auth-Token': ROCKETCHAT_AUTH_TOKEN,
+            'X-User-Id': ROCKETCHAT_USER_ID,
+        }
         data = {
             'email': request.user.email,
             'name': request.user.name,
