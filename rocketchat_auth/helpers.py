@@ -26,7 +26,7 @@ def create_user(email, fullname, username):
         }
         data = {
             'email': email,
-            'name': name,
+            'name': fullname,
             'username': username,
             'password': generate_token(),
         }
