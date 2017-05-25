@@ -32,7 +32,7 @@ def create_user(email, fullname, username):
             'password': generate_token(),
         }
         resp = requests.post(settings.ROCKETCHAT_URL + '/api/v1/users.create',
-                            headers=headers, data=data)
+                             headers=headers, data=data)
         if resp.status_code != 200:
             raise Exception('Could not create user')
 
