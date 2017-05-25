@@ -4,6 +4,7 @@ import string
 from pymongo import MongoClient
 from django.conf import settings
 
+
 def generate_token(n=50):
     chars = string.ascii_letters + string.digits
     token = ''.join(random.SystemRandom().choice(chars) for _ in range(n))
@@ -27,14 +28,14 @@ def create_user(email, fullname, username):
             'email': email,
             'name': name,
             'username': username,
-            'password': helpers.generate_token(),
+            'password': generate_token(),
         }
         requests.get(settings.ROCKETCHAT_URL + '/api/v1/users.create',
                      headers=headers, data=data)
 
         user = mongo.users.find_one({'username': username})
 
-    user['services'] = {'iframe': {'token': helpers.generate_token()}}
+    user['services'] = {'iframe': {'token': generate_token()}}
     mongo.users.update_one({'_id': user['_id']}, {'$set': user})
 
     return user['services']['iframe']['token']
