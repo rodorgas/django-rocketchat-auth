@@ -1,6 +1,7 @@
 import hashlib
 import random
 import string
+import requests
 from pymongo import MongoClient
 from django.conf import settings
 
@@ -30,8 +31,10 @@ def create_user(email, fullname, username):
             'username': username,
             'password': generate_token(),
         }
-        requests.get(settings.ROCKETCHAT_URL + '/api/v1/users.create',
-                     headers=headers, data=data)
+        resp = requests.post(settings.ROCKETCHAT_URL + '/api/v1/users.create',
+                             headers=headers, data=data)
+        if resp.status_code != 200:
+            raise Exception('Could not create user')
 
         user = mongo.users.find_one({'username': username})
 
