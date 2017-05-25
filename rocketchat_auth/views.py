@@ -5,7 +5,6 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.clickjacking import xframe_options_exempt
 from .decorators import cors_allow_credentials
-from pymongo import MongoClient
 from rocketchat_auth import helpers
 
 
@@ -29,4 +28,9 @@ def api(request):
     fullname = ' '.join([request.user.first_name, request.user.last_name])\
                   .strip()
 
-    return helpers.create_user(request.email, fullname, request.username)
+    token = helpers.create_user(
+         request.user.email, fullname, request.user.username)
+
+    return JsonResponse({
+        'token': token
+    })

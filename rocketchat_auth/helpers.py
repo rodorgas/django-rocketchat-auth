@@ -37,7 +37,4 @@ def create_user(email, fullname, username):
     user['services'] = {'iframe': {'token': helpers.generate_token()}}
     mongo.users.update_one({'_id': user['_id']}, {'$set': user})
 
-
-    return JsonResponse({
-        'token': user['services']['iframe']['token'],
-    })
+    return user['services']['iframe']['token']
