@@ -26,33 +26,7 @@ def api(request):
     if not request.user.is_authenticated():
         return HttpResponse(status=401)
 
-    client = MongoClient("mongodb://" + settings.MONGO_DB)
-    mongo = client.rocketchat
+    fullname = ' '.join([request.user.first_name, request.user.last_name])\
+                  .strip()
 
-    user = mongo.users.find_one({'username': request.user.username})
-    if not user:
-        fullname = ' '.join([request.user.first_name, request.user.last_name])\
-                      .strip()
-
-        headers = {
-            'X-Auth-Token': ROCKETCHAT_AUTH_TOKEN,
-            'X-User-Id': ROCKETCHAT_USER_ID,
-        }
-        data = {
-            'email': request.user.email,
-            'name': request.user.name,
-            'username': request.user.username,
-            'password': helpers.generate_token(),
-        }
-        requests.get(settings.ROCKETCHAT_URL + '/api/v1/users.create',
-                    headers=headers, data=data)
-
-        user = mongo.users.find_one({'username': request.user.username})
-
-    user['services'] = {'iframe': {'token': helpers.generate_token()}}
-    mongo.users.update_one({'_id': user['_id']}, {'$set': user})
-
-
-    return JsonResponse({
-        'token': user['services']['iframe']['token'],
-    })
+    return helpers.create_user(request.email, fullname, request.username)
