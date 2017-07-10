@@ -26,7 +26,12 @@ Quickstart
 3. Update your `settings.py`::
 
     MONGO_DB = 'localhost:27017'
-    ROCKETCHAT = 'localhost'
+    ROCKETCHAT = 'localhost/rocketchat'
+
+
+  For heroku::
+
+    ROCKETCHAT = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
 
 4. Include the rocketchat_auth URLconf in your project urls.py like this::
 
