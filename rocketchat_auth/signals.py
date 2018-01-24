@@ -8,7 +8,7 @@ import requests
 import logging
 
 
-logger = loggin.getLogger('dm.log')
+logger = logging.getLogger('dm.log')
 
 @receiver(user_logged_out)
 def logout(sender, user, request, **kwargs):
