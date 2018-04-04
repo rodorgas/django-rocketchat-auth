@@ -16,7 +16,10 @@ def generate_token(n=50):
 
 def create_user(email, fullname, username):
     client = MongoClient("mongodb://" + settings.MONGO_DB)
-    mongo = client.get_default_database()
+    if '/' in settings.MONGO_DB:
+        mongo = client.get_default_database()
+    else:
+        mongo = client.rocketchat
 
     user = mongo.users.find_one({'username': username})
     if not user:

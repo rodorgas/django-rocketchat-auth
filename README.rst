@@ -8,6 +8,7 @@ Authenticate your `Rocket.Chat`_ users with Django web framework.
 
 This app implements the API used by `Rocket.Chat IFrame authentication`_. Also, it handles logout by wiring up a method on Django signals.
 
+It was tested with Django 2.0.4 and Rocket.Chat 0.62.2. If you have any problems, please open an issue.
 
 Quickstart
 ----------
@@ -23,25 +24,39 @@ Quickstart
         'rocketchat_auth',
     )
 
-3. Update your `settings.py`::
+3. `Get an Rocket.Chat authentication token`_, so we can use the API.
+
+4. Update your `settings.py`::
 
     MONGO_DB = 'localhost:27017'
-    ROCKETCHAT = 'localhost/rocketchat'
+
+    ROCKETCHAT_URL = 'http://localhost:3000'
+    # or more verbose (e.g. for Heroku)
+    # ROCKETCHAT = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
+
+    ROCKETCHAT_AUTH_TOKEN = '<YOUR AUTH TOKEN>'
+    ROCKETCHAT_USER_ID = '<YOUR USER ID>'
+
+    CORS_ORIGIN_WHITELIST = (
+        'localhost:8000',
+        'localhost:3000',
+    )
 
 
-  For heroku::
-
-    ROCKETCHAT = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
-
-4. Include the rocketchat_auth URLconf in your project urls.py like this::
+5. Include the rocketchat_auth URLconf in your project urls.py like this::
 
     urlpatterns += [url(r'^rocketchat/', include('rocketchat_auth.urls'))]
 
-5. You will probably need to use `django-cors-headers`_ and set your Rocket.Chat domain in `CORS_ORIGIN_WHITELIST`
+6. Since we will put your Django app into an iframe, we have to setup some security measures that would prevent it from happening:
 
-6. Now go to your Rocket.Chat admin page > Settings > Accounts. Enable **Iframe** and set:
+ - Install `django-cors-headers`_ and set your Rocket.Chat domain in `CORS_ORIGIN_WHITELIST`
+ - Configure Django's `XFrameOptionsMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
+ - Configure Django's `CsrfViewMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
 
- - **Iframe URL**: http://localhost:8000/login/?next=/rocketchat/redirect (assuming you have a login page in /login)
+7. Now go to your Rocket.Chat admin page > Accounts > Iframe:
+
+ - Enable **Iframe**
+ - **Iframe URL**: http://localhost:8000/admin/login/?next=/rocketchat/redirect
  - **URL API**: http://localhost:8000/rocketchat/api
 
 
@@ -54,3 +69,4 @@ Roadmap
 .. _`Rocket.Chat`: https://github.com/RocketChat/Rocket.Chat) users using [Django framework](https://github.com/django/django
 .. _`Rocket.Chat IFrame authentication`: https://rocket.chat/docs/administrator-guides/authentication/iframe/
 .. _`django-cors-headers`: https://github.com/ottoyiu/django-cors-headers
+.. _`Get an Rocket.Chat authentication token`: https://rocket.chat/docs/developer-guides/rest-api/authentication/login/
