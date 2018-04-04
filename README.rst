@@ -29,10 +29,10 @@ Quickstart
 4. Update your `settings.py`::
 
     MONGO_DB = 'localhost:27017'
+    # or more verbose (e.g. for Heroku)
+    # MONGO_DB = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
 
     ROCKETCHAT_URL = 'http://localhost:3000'
-    # or more verbose (e.g. for Heroku)
-    # ROCKETCHAT = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
 
     ROCKETCHAT_AUTH_TOKEN = '<YOUR AUTH TOKEN FROM STEP 3>'
     ROCKETCHAT_USER_ID = '<YOUR USER ID>'
@@ -49,9 +49,9 @@ Quickstart
 
 6. Since we will put your Django app into an iframe, we have to setup some security measures that would prevent it from happening:
 
- - Install `django-cors-headers`_ and set your Rocket.Chat domain in `CORS_ORIGIN_WHITELIST`
- - Configure Django's `XFrameOptionsMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
- - Configure Django's `CsrfViewMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
+  - Install `django-cors-headers`_ and set your Rocket.Chat domain in `CORS_ORIGIN_WHITELIST`
+  - Configure Django's `XFrameOptionsMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
+  - Configure Django's `CsrfViewMiddleware` to exempt your login page for Rocket.Chat requests or disable it (dangerous)
 
 7. Now go to your Rocket.Chat admin page > Accounts > Iframe:
 
