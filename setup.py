@@ -35,5 +35,6 @@ setup(
     ],
     install_requires=[
         'pymongo',
+        'requests',
     ],
 )

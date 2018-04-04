@@ -34,7 +34,7 @@ Quickstart
     # or more verbose (e.g. for Heroku)
     # ROCKETCHAT = '<dbuser>:<dbpassword>@<dbhost>:<dbport>/<dbname>?authSource=<dbname>'
 
-    ROCKETCHAT_AUTH_TOKEN = '<YOUR AUTH TOKEN>'
+    ROCKETCHAT_AUTH_TOKEN = '<YOUR AUTH TOKEN FROM STEP 3>'
     ROCKETCHAT_USER_ID = '<YOUR USER ID>'
 
     CORS_ORIGIN_WHITELIST = (
